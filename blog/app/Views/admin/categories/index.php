@@ -1,10 +1,6 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
-<!-- Header Moderno -->
-<header class="flex justify-between items-center bg-gradient-to-r from-blue-700 to-green-400 text-white rounded-xl shadow-lg px-8 py-4 mt-6 max-w-4xl mx-auto">
-  <span class="font-bold text-xl">BlogLogo</span>
-  <span class="text-sm">Panel Admin</span>
-</header>
+
 
 <h1 class="text-4xl md:text-5xl font-bold text-center my-12">Gestión de Categorías</h1>
 
@@ -25,10 +21,23 @@
   <?php else: ?>
     <?php foreach ($categories as $category): ?>
       <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col gap-2 border-t-4 border-blue-400">
-        <span class="text-2xl font-bold text-blue-700 mb-2 flex items-center gap-2">
-          <span class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">#<?= esc($category['id']) ?></span>
-          <?= esc($category['name']) ?>
-        </span>
+        <div class="flex items-center gap-4">
+          <?php if (!empty($category['image'])): ?>
+            <img src="/writable/<?= esc($category['image']) ?>" alt="<?= esc($category['name']) ?>" class="w-16 h-16 object-cover rounded-lg border-2 border-blue-200">
+          <?php else: ?>
+            <div class="w-16 h-16 bg-blue-100 rounded-lg border-2 border-blue-200 flex items-center justify-center">
+              <svg class="w-8 h-8 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          <?php endif; ?>
+          <div class="flex-1">
+            <span class="text-2xl font-bold text-blue-700 mb-2 flex items-center gap-2">
+              <span class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">#<?= esc($category['id']) ?></span>
+              <?= esc($category['name']) ?>
+            </span>
+          </div>
+        </div>
         <div class="flex gap-2 mt-4">
           <a href="/admin/categories/edit/<?= $category['id'] ?>" class="bg-yellow-400 text-white px-4 py-1 rounded-full hover:bg-yellow-500 transition font-semibold shadow">Editar</a>
           <a href="/admin/categories/delete/<?= $category['id'] ?>" class="bg-red-500 text-white px-4 py-1 rounded-full hover:bg-red-600 transition font-semibold shadow" onclick="return confirm('¿Eliminar esta categoría?')">Eliminar</a>

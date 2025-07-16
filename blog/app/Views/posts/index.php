@@ -8,11 +8,7 @@ foreach ($categoryModel->findAll() as $cat) {
     $categoryMap[$cat['id']] = $cat['name'];
 }
 ?>
-<!-- Header Moderno -->
-<header class="flex justify-between items-center bg-gray-900 text-white rounded-xl shadow-lg px-8 py-4 mt-6 max-w-4xl mx-auto">
-  <span class="font-bold text-xl">BlogLogo</span>
-  <span class="text-sm">+1234 567 8900</span>
-</header>
+
 
 <!-- Título central -->
 <h1 class="text-5xl md:text-6xl font-bold text-center my-12">Insights & stories from the digital world</h1>

@@ -1,14 +1,7 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 <?php $user = auth()->user(); ?>
-<!-- Header Moderno -->
-<header class="flex justify-between items-center bg-gray-900 text-white rounded-xl shadow-lg px-8 py-4 mt-6 max-w-4xl mx-auto">
-  <span class="font-bold text-xl">BlogLogo</span>
-  <div class="flex items-center gap-4">
-    <span class="text-sm hidden md:inline">+1234 567 8900</span>
-    <a href="<?= route_to('logout') ?>" class="bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition font-semibold shadow">Cerrar Sesión</a>
-  </div>
-</header>
+
 
 <!-- Título central -->
 <h1 class="text-5xl md:text-6xl font-bold text-center my-12">Insights & stories from the digital world</h1>
