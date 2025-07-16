@@ -4,16 +4,18 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\CategoryModel;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class CategoryAdminController extends BaseController
 {
+    // La verificación de autenticación se maneja por el filtro 'session'
+
     public function index()
     {
         $categoryModel = new CategoryModel();
         $categories = $categoryModel->orderBy('name', 'ASC')->findAll();
         return view('admin/categories/index', ['categories' => $categories]);
     }
-
     public function create()
     {
         return view('admin/categories/create');

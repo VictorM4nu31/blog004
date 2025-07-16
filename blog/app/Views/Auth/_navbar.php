@@ -3,10 +3,10 @@
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
             <?php if (isset($user) && $user): ?>
-                <?php if (function_exists('service') && service('authorization')->inGroup('admin', $user->id)): ?>
+                <?php if ($user->inGroup('admin')): ?>
                     <li class="nav-item"><a class="nav-link" href="/admin/posts">Panel Admin</a></li>
                     <li class="nav-item"><a class="nav-link" href="/admin/categories">Categorías</a></li>
-                <?php elseif (function_exists('service') && service('authorization')->inGroup('user', $user->id)): ?>
+                <?php elseif ($user->inGroup('user')): ?>
                     <li class="nav-item"><a class="nav-link" href="/user/dashboard">Mi Panel</a></li>
                 <?php endif; ?>
                 <li class="nav-item"><a class="nav-link" href="/logout">Salir</a></li>
@@ -16,4 +16,4 @@
             <?php endif; ?>
         </ul>
     </div>
-</nav>
+</nav> 

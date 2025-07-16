@@ -6,10 +6,10 @@
   <link rel="stylesheet" href="<?= base_url('assets/css/styles.css') ?>">
 </head>
 <body>
-  <?php $auth = service('authentication'); ?>
-  <?= view('Auth/_navbar', ['user' => $auth->user()]) ?>
+  <?php helper('auth'); ?>
+  <?= view('Auth/_navbar', ['user' => auth()->user()]) ?>
   <main class="container mx-auto py-6">
-    <?= view('Auth/_message_block') ?>
+  
     <?= $this->renderSection('content') ?>
   </main>
 </body>

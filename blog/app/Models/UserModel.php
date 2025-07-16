@@ -2,41 +2,37 @@
 
 namespace App\Models;
 
-use CodeIgniter\Model;
-use Faker\Generator;
-use Myth\Auth\Authorization\GroupModel;
-use Myth\Auth\Entities\User;
+use CodeIgniter\Shield\Models\UserModel as ShieldUserModel;
 
-/**
- * @method User|null first()
- */
-class UserModel extends Model
+class UserModel extends ShieldUserModel
 {
-    protected $table          = 'users';
-    protected $primaryKey     = 'id';
-    protected $returnType     = 'App\Entities\User';
+    protected $table = 'users';
+    protected $primaryKey = 'id';
+    protected $useAutoIncrement = true;
+    protected $returnType = 'array';
     protected $useSoftDeletes = true;
-    protected $allowedFields  = [
-        'email', 'username', 'password_hash', 'reset_hash', 'reset_at', 'reset_expires', 'activate_hash',
-        'status', 'status_message', 'active', 'force_pass_reset', 'permissions', 'deleted_at',
-    ];
-    protected $useTimestamps   = true;
-    protected $validationRules = [
-        'email'         => 'required|valid_email|is_unique[users.email,id,{id}]',
-        'username'      => 'required|alpha_numeric_punct|min_length[3]|max_length[30]|is_unique[users.username,id,{id}]',
-        'password_hash' => 'required',
-    ];
+    protected $protectFields = true;
+    protected $allowedFields = ['email', 'username', 'password', 'active', 'force_pass_reset', 'permissions', 'activate_hash', 'reset_hash', 'reset_at', 'reset_expires', 'activate_hash', 'status', 'status_message', 'last_login', 'created_at', 'updated_at', 'deleted_at'];
+    protected $useTimestamps = true;
+    protected $createdField = 'created_at';
+    protected $updatedField = 'updated_at';
+    protected $deletedField = 'deleted_at';
+    protected $dateFormat = 'datetime';
+    protected $validationRules = [];
     protected $validationMessages = [];
-    protected $skipValidation     = false;
-    protected $afterInsert        = ['addToGroup'];
+    protected $skipValidation = false;
+    protected $cleanValidationRules = true;
 
-    /**
-     * The id of a group to assign.
-     * Set internally by withGroup.
-     *
-     * @var int|null
-     */
-    protected $assignGroup;
+    // Callbacks
+    protected $allowCallbacks = true;
+    protected $beforeInsert = [];
+    protected $afterInsert = [];
+    protected $beforeUpdate = [];
+    protected $afterUpdate = [];
+    protected $beforeFind = [];
+    protected $afterFind = [];
+    protected $beforeDelete = [];
+    protected $afterDelete = [];
 
     /**
      * Logs a password reset attempt for posterity sake.

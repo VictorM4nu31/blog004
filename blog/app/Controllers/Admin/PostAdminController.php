@@ -9,11 +9,22 @@ use CodeIgniter\HTTP\RedirectResponse;
 
 class PostAdminController extends BaseController
 {
+    // La verificación de autenticación se maneja por el filtro 'session'
+
     public function index()
     {
         $postModel = new PostModel();
         $posts = $postModel->orderBy('created_at', 'DESC')->findAll();
-        return view('admin/posts/index', ['posts' => $posts]);
+        
+        // Obtener categorías para el mapeo
+        $categoryModel = new CategoryModel();
+        $categories = $categoryModel->findAll();
+        $categoryMap = [];
+        foreach ($categories as $category) {
+            $categoryMap[$category['id']] = $category['name'];
+        }
+        
+        return view('admin/posts/index', ['posts' => $posts, 'categoryMap' => $categoryMap]);
     }
 
     public function create()
