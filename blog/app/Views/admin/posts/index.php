@@ -1,5 +1,6 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
+<?php $user = auth()->user(); ?>
 <!-- Mensajes -->
 <?php if (session('message')): ?>
     <div class="bg-green-100 text-green-800 p-2 mb-4 rounded"> <?= session('message') ?> </div>
@@ -11,14 +12,14 @@
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold">Artículos</h1>
     <div class="flex space-x-2">
-        <?php if (auth()->user()->can('blog.posts.create')): ?>
+        <?php if ($user && $user->can('blog.posts.create')): ?>
             <a href="/admin/posts/create" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Nuevo Artículo</a>
         <?php endif; ?>
-        <?php if (auth()->user()->can('blog.categories.view')): ?>
+        <?php if ($user && $user->can('blog.categories.view')): ?>
             <a href="/admin/categories" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Categorías</a>
         <?php endif; ?>
         <a href="<?= route_to('logout') ?>" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Cerrar Sesión</a>
-        <span class="text-gray-600 px-4 py-2">Usuario: <?= auth()->user()->username ?> (<?= implode(', ', auth()->user()->getGroups()) ?>)</span>
+        <span class="text-gray-600 px-4 py-2">Usuario: <?= $user ? $user->username : '' ?> (<?= $user ? implode(', ', $user->getGroups()) : '' ?>)</span>
     </div>
 </div>
 

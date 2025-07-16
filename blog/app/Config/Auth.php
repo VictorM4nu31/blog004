@@ -228,7 +228,8 @@ class Auth extends ShieldAuth
             'required',
             'max_length[30]',
             'min_length[3]',
-            'regex_match[/\A[a-zA-Z0-9\.]+\z/]',
+            // Permitir letras, números, puntos y espacios
+            'regex_match[/\A[a-zA-Z0-9\. ]+\z/]',
         ],
     ];
 
@@ -273,7 +274,7 @@ class Auth extends ShieldAuth
     public array $passwordValidators = [
         CompositionValidator::class,
         NothingPersonalValidator::class,
-        DictionaryValidator::class,
+        // DictionaryValidator::class, // Desactivado para permitir contraseñas comunes en desarrollo
         // PwnedValidator::class,
     ];
 
@@ -285,7 +286,7 @@ class Auth extends ShieldAuth
      */
     public array $validFields = [
         'email',
-        // 'username',
+        'username',
     ];
 
     /**

@@ -9,43 +9,24 @@ class RoleSeeder extends Seeder
 {
     public function run()
     {
-        // Crear usuario administrador
         $userModel = new UserModel();
         
-        // Crear admin
+        // Asignar rol admin si el usuario existe
         $admin = $userModel->findByCredentials(['email' => 'admin@blog.com']);
-        if (!$admin) {
-            $admin = new \CodeIgniter\Shield\Entities\User([
-                'username' => 'admin',
-                'email' => 'admin@blog.com',
-                'password' => 'admin123',
-            ]);
-            $admin->activate();
-            $userModel->save($admin);
-            $admin = $userModel->findByCredentials(['email' => 'admin@blog.com']);
+        if ($admin) {
+            $admin->addGroup('admin');
+            echo "Rol 'admin' asignado a admin@blog.com\n";
+        } else {
+            echo "Usuario admin@blog.com no encontrado.\n";
         }
         
-        // Asignar al grupo admin
-        $admin->addGroup('admin');
-        
-        // Crear usuario regular
+        // Asignar rol user si el usuario existe
         $user = $userModel->findByCredentials(['email' => 'user@blog.com']);
-        if (!$user) {
-            $user = new \CodeIgniter\Shield\Entities\User([
-                'username' => 'user',
-                'email' => 'user@blog.com',
-                'password' => 'user123',
-            ]);
-            $user->activate();
-            $userModel->save($user);
-            $user = $userModel->findByCredentials(['email' => 'user@blog.com']);
+        if ($user) {
+            $user->addGroup('user');
+            echo "Rol 'user' asignado a user@blog.com\n";
+        } else {
+            echo "Usuario user@blog.com no encontrado.\n";
         }
-        
-        // Asignar al grupo user (ya es el default)
-        $user->addGroup('user');
-        
-        echo "Usuarios creados:\n";
-        echo "Admin: admin@blog.com / admin123\n";
-        echo "User: user@blog.com / user123\n";
     }
 }

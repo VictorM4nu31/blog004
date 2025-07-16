@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Config;
 
-use CodeIgniter\Config\BaseConfig;
+use CodeIgniter\Shield\Config\AuthGroups as ShieldAuthGroups;
 
-class AuthGroups extends BaseConfig
+class AuthGroups extends ShieldAuthGroups
 {
     /**
      * --------------------------------------------------------------------
@@ -79,15 +79,11 @@ class AuthGroups extends BaseConfig
         'users.edit'          => 'Can edit existing non-admin users',
         'users.delete'        => 'Can delete existing non-admin users',
         'beta.access'         => 'Can access beta-level features',
-        // Blog permissions
-        'blog.posts.create'   => 'Can create blog posts',
-        'blog.posts.edit'     => 'Can edit blog posts',
-        'blog.posts.delete'   => 'Can delete blog posts',
-        'blog.posts.view'     => 'Can view blog posts',
-        'blog.categories.create' => 'Can create blog categories',
-        'blog.categories.edit'   => 'Can edit blog categories',
-        'blog.categories.delete' => 'Can delete blog categories',
-        'blog.categories.view'   => 'Can view blog categories',
+        'blog.categories.view'   => 'Puede ver categorías',
+        'blog.categories.create' => 'Puede crear categorías',
+        'blog.categories.edit'   => 'Puede editar categorías',
+        'blog.categories.delete' => 'Puede eliminar categorías',
+        'blog.posts.view' => 'Puede ver artículos',
     ];
 
     /**
@@ -103,7 +99,6 @@ class AuthGroups extends BaseConfig
             'admin.*',
             'users.*',
             'beta.*',
-            'blog.*',
         ],
         'admin' => [
             'admin.access',
@@ -111,8 +106,11 @@ class AuthGroups extends BaseConfig
             'users.edit',
             'users.delete',
             'beta.access',
-            'blog.posts.*',
-            'blog.categories.*',
+            'blog.categories.view',
+            'blog.categories.create',
+            'blog.categories.edit',
+            'blog.categories.delete',
+            'blog.posts.view',
         ],
         'developer' => [
             'admin.access',
@@ -120,17 +118,10 @@ class AuthGroups extends BaseConfig
             'users.create',
             'users.edit',
             'beta.access',
-            'blog.posts.*',
-            'blog.categories.*',
         ],
-        'user' => [
-            'blog.posts.view',
-            'blog.categories.view',
-        ],
+        'user' => [],
         'beta' => [
             'beta.access',
-            'blog.posts.view',
-            'blog.categories.view',
         ],
     ];
 }
