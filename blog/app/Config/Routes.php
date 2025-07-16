@@ -5,7 +5,13 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
+$routes->get('/', 'AuthController::login');
+
+$routes->get('login', 'AuthController::login');
+$routes->post('login', 'AuthController::attemptLogin');
+$routes->get('logout', 'AuthController::logout');
+$routes->get('register', 'AuthController::register');
+$routes->post('register', 'AuthController::attemptRegister');
 
 $routes->group('admin', ['filter' => 'auth'], function($routes) {
     $routes->get('posts', 'Admin\PostAdminController::index');

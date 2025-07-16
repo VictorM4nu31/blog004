@@ -46,14 +46,11 @@ class AuthController extends Controller
         // No need to show a login form if the user
         // is already logged in.
         if ($this->auth->check()) {
-            $redirectURL = session('redirect_url') ?? site_url('/');
-            unset($_SESSION['redirect_url']);
-
-            return redirect()->to($redirectURL);
+            return redirect()->to('/admin/posts/create');
         }
 
         // Set a return URL if none is specified
-        $_SESSION['redirect_url'] = session('redirect_url') ?? previous_url() ?? site_url('/');
+        session()->set('redirect_url', previous_url() ?? site_url('/admin/posts/create'));
 
         return $this->_render($this->config->views['login'], ['config' => $this->config]);
     }
@@ -93,8 +90,8 @@ class AuthController extends Controller
             return redirect()->to(route_to('reset-password') . '?token=' . $this->auth->user()->reset_hash)->withCookies();
         }
 
-        $redirectURL = session('redirect_url') ?? site_url('/');
-        unset($_SESSION['redirect_url']);
+        $redirectURL = session('redirect_url') ?? site_url('/admin/posts/create');
+        session()->remove('redirect_url');
 
         return redirect()->to($redirectURL)->withCookies()->with('message', lang('Auth.loginSuccess'));
     }
@@ -157,8 +154,8 @@ class AuthController extends Controller
 
         // Validate passwords since they can only be validated properly here
         $rules = [
-            'password'     => 'required|strong_password',
-            'pass_confirm' => 'required|matches[password]',
+            'password'     => 'required|min_length[8]',
+            'pass_confirm' => 'required|min_length[8]',
         ];
 
         if (! $this->validate($rules)) {
