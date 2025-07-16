@@ -1,3 +1,11 @@
+<?php
+use App\Models\CategoryModel;
+$categoryModel = new CategoryModel();
+$categoryMap = [];
+foreach ($categoryModel->findAll() as $cat) {
+    $categoryMap[$cat['id']] = $cat['name'];
+}
+?>
 <!-- Header -->
 <header class="bg-gray-800 text-white p-4 mb-6">
     <div class="container mx-auto flex justify-between items-center">
@@ -21,7 +29,7 @@
                         <img src="<?= esc($post['image']) ?>" alt="<?= esc($post['title']) ?>" class="mb-3 rounded h-48 w-full object-cover">
                     <?php endif; ?>
                     <h2 class="text-xl font-semibold mb-2"><?= esc($post['title']) ?></h2>
-                    <div class="text-sm text-gray-400 mb-2">Categoría: <?= esc($post['category']) ?> | <?= date('d/m/Y', strtotime($post['created_at'])) ?></div>
+                    <div class="text-sm text-gray-400 mb-2">Categoría: <?= esc($categoryMap[$post['category_id']] ?? 'Sin categoría') ?> | <?= date('d/m/Y', strtotime($post['created_at'])) ?></div>
                     <p class="flex-1 text-gray-700 mb-4"> <?= esc(substr($post['content'], 0, 120)) ?>...</p>
                     <a href="#" class="text-blue-600 hover:underline mt-auto">Leer más</a>
                 </article>

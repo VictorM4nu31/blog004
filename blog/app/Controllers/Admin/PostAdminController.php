@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\PostModel;
+use App\Models\CategoryModel;
 use CodeIgniter\HTTP\RedirectResponse;
 
 class PostAdminController extends BaseController
@@ -17,7 +18,9 @@ class PostAdminController extends BaseController
 
     public function create()
     {
-        return view('admin/posts/create');
+        $categoryModel = new CategoryModel();
+        $categories = $categoryModel->orderBy('name', 'ASC')->findAll();
+        return view('admin/posts/create', ['categories' => $categories]);
     }
 
     public function store()
@@ -26,7 +29,7 @@ class PostAdminController extends BaseController
         $rules = [
             'title' => 'required|min_length[3]|max_length[255]',
             'content' => 'required|min_length[10]',
-            'category' => 'required|min_length[3]|max_length[100]',
+            'category_id' => 'required|is_natural_no_zero',
             'image' => 'permit_empty|valid_url',
         ];
         if (! $this->validate($rules)) {
@@ -36,7 +39,7 @@ class PostAdminController extends BaseController
         $data = [
             'title' => $this->request->getPost('title'),
             'content' => $this->request->getPost('content'),
-            'category' => $this->request->getPost('category'),
+            'category_id' => $this->request->getPost('category_id'),
             'image' => $this->request->getPost('image'),
         ];
         $postModel->insert($data);
@@ -50,7 +53,9 @@ class PostAdminController extends BaseController
         if (!$post) {
             return redirect()->to('/admin/posts')->with('error', 'Artículo no encontrado');
         }
-        return view('admin/posts/edit', ['post' => $post]);
+        $categoryModel = new CategoryModel();
+        $categories = $categoryModel->orderBy('name', 'ASC')->findAll();
+        return view('admin/posts/edit', ['post' => $post, 'categories' => $categories]);
     }
 
     public function update($id)
@@ -59,7 +64,7 @@ class PostAdminController extends BaseController
         $rules = [
             'title' => 'required|min_length[3]|max_length[255]',
             'content' => 'required|min_length[10]',
-            'category' => 'required|min_length[3]|max_length[100]',
+            'category_id' => 'required|is_natural_no_zero',
             'image' => 'permit_empty|valid_url',
         ];
         if (! $this->validate($rules)) {
@@ -69,7 +74,7 @@ class PostAdminController extends BaseController
         $data = [
             'title' => $this->request->getPost('title'),
             'content' => $this->request->getPost('content'),
-            'category' => $this->request->getPost('category'),
+            'category_id' => $this->request->getPost('category_id'),
             'image' => $this->request->getPost('image'),
         ];
         $postModel->update($id, $data);

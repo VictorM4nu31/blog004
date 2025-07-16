@@ -29,7 +29,7 @@
                 <tr>
                     <td class="py-2 px-4 border-b"> <?= esc($post['id']) ?> </td>
                     <td class="py-2 px-4 border-b"> <?= esc($post['title']) ?> </td>
-                    <td class="py-2 px-4 border-b"> <?= esc($post['category']) ?> </td>
+                    <td class="py-2 px-4 border-b"> <?= esc($categoryMap[$post['category_id']] ?? 'Sin categoría') ?> </td>
                     <td class="py-2 px-4 border-b"> <?= date('d/m/Y', strtotime($post['created_at'])) ?> </td>
                     <td class="py-2 px-4 border-b">
                         <a href="/admin/posts/edit/<?= $post['id'] ?>" class="text-blue-600 hover:underline mr-2">Editar</a>

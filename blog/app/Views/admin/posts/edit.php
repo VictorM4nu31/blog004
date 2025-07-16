@@ -23,7 +23,12 @@
     </div>
     <div class="mb-4">
         <label class="block mb-1 font-semibold">Categoría</label>
-        <input type="text" name="category" class="w-full border px-3 py-2 rounded" value="<?= old('category', $post['category']) ?>" required>
+        <select name="category_id" class="w-full border px-3 py-2 rounded" required>
+            <option value="">Selecciona una categoría</option>
+            <?php foreach ($categories as $cat): ?>
+                <option value="<?= $cat['id'] ?>" <?= old('category_id', $post['category_id']) == $cat['id'] ? 'selected' : '' ?>><?= esc($cat['name']) ?></option>
+            <?php endforeach; ?>
+        </select>
     </div>
     <div class="flex justify-end">
         <a href="/admin/posts" class="mr-4 text-gray-600 hover:underline">Cancelar</a>
