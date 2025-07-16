@@ -1,14 +1,19 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="#">Myth:Auth</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <a class="navbar-brand" href="/">Mi Blog</a>
+    <div class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#"><?= lang('Auth.home')?> <span class="sr-only">(<?= lang('Auth.current')?>)</span></a>
-            </li>
+            <?php if (isset($user) && $user): ?>
+                <?php if (function_exists('service') && service('authorization')->inGroup('admin', $user->id)): ?>
+                    <li class="nav-item"><a class="nav-link" href="/admin/posts">Panel Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/categories">Categorías</a></li>
+                <?php elseif (function_exists('service') && service('authorization')->inGroup('user', $user->id)): ?>
+                    <li class="nav-item"><a class="nav-link" href="/user/dashboard">Mi Panel</a></li>
+                <?php endif; ?>
+                <li class="nav-item"><a class="nav-link" href="/logout">Salir</a></li>
+            <?php else: ?>
+                <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="/register">Registro</a></li>
+            <?php endif; ?>
         </ul>
     </div>
 </nav>
