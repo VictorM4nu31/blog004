@@ -1,75 +1,76 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - Blog</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card mt-5">
-                    <div class="card-header">
-                        <h3>Registro de Usuario</h3>
-                    </div>
-                    <div class="card-body">
-                        <?php if (session()->has('error')) : ?>
-                            <div class="alert alert-danger">
-                                <?= session('error') ?>
-                            </div>
-                        <?php endif ?>
-
-                        <?php if (session()->has('errors')) : ?>
-                            <div class="alert alert-danger">
-                                <ul class="mb-0">
-                                    <?php foreach (session('errors') as $error) : ?>
-                                        <li><?= $error ?></li>
-                                    <?php endforeach ?>
-                                </ul>
-                            </div>
-                        <?php endif ?>
-
-                        <?php if (session()->has('message')) : ?>
-                            <div class="alert alert-success">
-                                <?= session('message') ?>
-                            </div>
-                        <?php endif ?>
-
-                        <form action="<?= route_to('register') ?>" method="post">
-                            <?= csrf_field() ?>
-                            
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Nombre de Usuario</label>
-                                <input type="text" class="form-control" id="username" name="username" value="<?= old('username') ?>" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" value="<?= old('email') ?>" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="password_confirm" class="form-label">Confirmar Contraseña</label>
-                                <input type="password" class="form-control" id="password_confirm" name="password_confirm" required>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary w-100">Registrarse</button>
-                        </form>
-
-                        <div class="text-center mt-3">
-                            <p>¿Ya tienes una cuenta? <a href="<?= route_to('login') ?>">Inicia sesión aquí</a></p>
-                        </div>
-                    </div>
+<?= $this->extend('layouts/auth') ?>
+<?= $this->section('content') ?>
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <div class="text-center">
+                <div class="mb-6">
+                    <h1 class="text-4xl font-bold text-blue-600 mb-2">Mi Blog</h1>
+                    <p class="text-gray-500">Crea tu cuenta</p>
                 </div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-6">Registro de Usuario</h2>
+            </div>
+            
+            <?php if (session()->has('error')) : ?>
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    <?= session('error') ?>
+                </div>
+            <?php endif ?>
+
+            <?php if (session()->has('errors')) : ?>
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    <ul class="list-disc list-inside">
+                        <?php foreach (session('errors') as $error) : ?>
+                            <li><?= $error ?></li>
+                        <?php endforeach ?>
+                    </ul>
+                </div>
+            <?php endif ?>
+
+            <?php if (session()->has('message')) : ?>
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                    <?= session('message') ?>
+                </div>
+            <?php endif ?>
+
+            <form action="<?= route_to('register') ?>" method="post" class="space-y-6">
+                <?= csrf_field() ?>
+                
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Nombre de Usuario</label>
+                    <input type="text" id="username" name="username" value="<?= old('username') ?>" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input type="email" id="email" name="email" value="<?= old('email') ?>" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+                    <input type="password" id="password" name="password" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+
+                <div>
+                    <label for="password_confirm" class="block text-sm font-medium text-gray-700 mb-1">Confirmar Contraseña</label>
+                    <input type="password" id="password_confirm" name="password_confirm" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition font-semibold">
+                    Registrarse
+                </button>
+            </form>
+
+            <div class="text-center mt-6">
+                <p class="text-gray-600">¿Ya tienes una cuenta? 
+                    <a href="<?= route_to('login') ?>" class="text-blue-600 hover:text-blue-500 font-medium">Inicia sesión aquí</a>
+                </p>
             </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+<?= $this->endSection() ?>

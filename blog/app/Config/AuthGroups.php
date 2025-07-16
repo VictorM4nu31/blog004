@@ -83,7 +83,10 @@ class AuthGroups extends ShieldAuthGroups
         'blog.categories.create' => 'Puede crear categorías',
         'blog.categories.edit'   => 'Puede editar categorías',
         'blog.categories.delete' => 'Puede eliminar categorías',
-        'blog.posts.view' => 'Puede ver artículos',
+        'blog.posts.view'   => 'Puede ver artículos',
+        'blog.posts.create' => 'Puede crear artículos',
+        'blog.posts.edit'   => 'Puede editar artículos',
+        'blog.posts.delete' => 'Puede eliminar artículos',
     ];
 
     /**
@@ -111,6 +114,9 @@ class AuthGroups extends ShieldAuthGroups
             'blog.categories.edit',
             'blog.categories.delete',
             'blog.posts.view',
+            'blog.posts.create',
+            'blog.posts.edit',
+            'blog.posts.delete',
         ],
         'developer' => [
             'admin.access',

@@ -1,2 +1,13 @@
-@import "tailwindcss/preflight";
-@tailwind utilities;
+@import "tailwindcss";
+
+@layer base {
+  /* Estilos base personalizados */
+}
+
+@layer components {
+  /* Componentes personalizados */
+}
+
+@layer utilities {
+  /* Utilidades personalizadas */
+}

@@ -8,9 +8,9 @@ use App\Controllers\User\UserDashboardController;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', function() {
-    return redirect()->to('/login');
-});
+$routes->get('/', 'PostController::index');
+$routes->get('posts', 'PostController::index');
+$routes->get('posts/(:num)', 'PostController::show/$1');
 
 // Shield routes
 service('auth')->routes($routes);
