@@ -1,3 +1,5 @@
+<?= $this->extend('layouts/main') ?>
+<?= $this->section('content') ?>
 <!-- Mensajes -->
 <?php if (session('message')): ?>
     <div class="bg-green-100 text-green-800 p-2 mb-4 rounded"> <?= session('message') ?> </div>
@@ -35,4 +37,5 @@
             <?php endforeach; ?>
         <?php endif; ?>
     </tbody>
-</table> 
+</table>
+<?= $this->endSection() ?> 

@@ -1,3 +1,5 @@
+<?= $this->extend('layouts/main') ?>
+<?= $this->section('content') ?>
 <?php
 use App\Models\CategoryModel;
 $categoryModel = new CategoryModel();
@@ -45,4 +47,5 @@ foreach ($categoryModel->findAll() as $cat) {
 <!-- Footer -->
 <footer class="bg-gray-900 text-gray-300 mt-12 p-4 text-center">
     Mini Blog &copy; <?= date('Y') ?>. Todos los derechos reservados.
-</footer> 
+</footer>
+<?= $this->endSection() ?> 

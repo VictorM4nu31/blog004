@@ -1,3 +1,5 @@
+<?= $this->extend('layouts/main') ?>
+<?= $this->section('content') ?>
 <?php if (session('errors')): ?>
     <div class="bg-red-100 text-red-800 p-2 mb-4 rounded">
         <ul class="list-disc pl-5">
@@ -34,4 +36,5 @@
         <a href="/admin/posts" class="mr-4 text-gray-600 hover:underline">Cancelar</a>
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Actualizar</button>
     </div>
-</form> 
+</form>
+<?= $this->endSection() ?> 
