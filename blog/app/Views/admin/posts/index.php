@@ -4,7 +4,7 @@
 <div class="container mx-auto px-4 py-6">
 
 <!-- Título central -->
-<h1 class="text-4xl md:text-5xl font-bold text-center my-12">Gestión de Artículos</h1>
+<h1 class="text-4xl md:text-5xl font-bold text-center my-12">Gestión de Posts</h1>
 
 <!-- Mensajes -->
 <?php if (session('message')): ?>
@@ -17,7 +17,7 @@
 <!-- Acciones principales -->
 <div class="flex justify-center gap-4 mb-8">
   <?php if ($user && $user->can('blog.posts.create')): ?>
-    <a href="/admin/posts/create" class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition font-semibold shadow">Nuevo Artículo</a>
+    <a href="/admin/posts/create" class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition font-semibold shadow">Nuevo Post</a>
   <?php endif; ?>
   <?php if ($user && $user->can('blog.categories.view')): ?>
     <a href="/admin/categories" class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition font-semibold shadow">Categorías</a>
@@ -25,11 +25,11 @@
   <a href="<?= route_to('logout') ?>" class="bg-red-600 text-white px-6 py-2 rounded-full hover:bg-red-700 transition font-semibold shadow">Cerrar Sesión</a>
 </div>
 
-<!-- Grid de artículos -->
+<!-- Grid de posts -->
 <main class="max-w-6xl mx-auto px-4">
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
     <?php if (empty($posts)): ?>
-      <div class="col-span-full text-center text-gray-500 text-lg">No hay artículos.</div>
+      <div class="col-span-full text-center text-gray-500 text-lg">No hay posts.</div>
     <?php else: ?>
       <?php foreach ($posts as $post): ?>
         <article class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col">
@@ -37,7 +37,13 @@
             <div class="h-2 w-full bg-gradient-to-r from-blue-500 to-green-400"></div>
           <?php endif; ?>
           <?php if (!empty($post['image'])): ?>
-            <img src="<?= esc($post['image']) ?>" alt="<?= esc($post['title']) ?>" class="h-48 w-full object-cover">
+            <img src="/writable/<?= esc($post['image']) ?>" alt="<?= esc($post['title']) ?>" class="h-48 w-full object-cover">
+          <?php else: ?>
+            <div class="h-48 w-full bg-gray-100 flex items-center justify-center">
+              <svg class="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+              </svg>
+            </div>
           <?php endif; ?>
           <div class="p-6 flex-1 flex flex-col">
             <h2 class="font-bold text-lg mb-1"><?= esc($post['title']) ?></h2>
@@ -68,7 +74,7 @@
 
 <script>
 function confirmDelete(postId) {
-  if (confirm('¿Eliminar este artículo?')) {
+  if (confirm('¿Eliminar este post?')) {
     window.location.href = '/admin/posts/delete/' + postId;
   }
 }

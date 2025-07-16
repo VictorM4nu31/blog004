@@ -12,21 +12,10 @@
         </ul>
       </div>
     <?php endif; ?>
-    <form action="/admin/categories/update/<?= $category['id'] ?>" method="post" enctype="multipart/form-data" class="space-y-6">
+    <form action="/admin/categories/update/<?= $category['id'] ?>" method="post" class="space-y-6">
       <div>
         <label class="block mb-1 font-semibold text-blue-700">Nombre</label>
         <input type="text" name="name" class="w-full border-2 border-blue-300 px-3 py-2 rounded focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition" required value="<?= old('name', $category['name']) ?>">
-      </div>
-      <div>
-        <label class="block mb-1 font-semibold text-blue-700">Imagen</label>
-        <?php if (!empty($category['image'])): ?>
-          <div class="mb-3">
-            <img src="/writable/<?= esc($category['image']) ?>" alt="Imagen actual" class="w-32 h-32 object-cover rounded-lg border-2 border-blue-300">
-            <p class="text-sm text-gray-600 mt-1">Imagen actual</p>
-          </div>
-        <?php endif; ?>
-        <input type="file" name="image" accept="image/*" class="w-full border-2 border-blue-300 px-3 py-2 rounded focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-        <p class="text-sm text-gray-600 mt-1">Formatos permitidos: JPG, PNG, GIF. Tamaño máximo: 5MB. Deja vacío para mantener la imagen actual.</p>
       </div>
       <div class="flex justify-end gap-4">
         <a href="/admin/categories" class="bg-gray-200 text-gray-700 px-5 py-2 rounded-full hover:bg-gray-300 transition font-semibold shadow">Cancelar</a>

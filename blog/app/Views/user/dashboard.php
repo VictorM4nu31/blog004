@@ -15,7 +15,13 @@
       <?php foreach ($posts as $post): ?>
         <article class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col">
           <?php if (!empty($post['image'])): ?>
-            <img src="<?= esc($post['image']) ?>" alt="<?= esc($post['title']) ?>" class="h-48 w-full object-cover">
+            <img src="/writable/<?= esc($post['image']) ?>" alt="<?= esc($post['title']) ?>" class="h-48 w-full object-cover">
+          <?php else: ?>
+            <div class="h-48 w-full bg-gray-100 flex items-center justify-center">
+              <svg class="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+              </svg>
+            </div>
           <?php endif; ?>
           <div class="p-6 flex-1 flex flex-col">
             <h2 class="font-bold text-lg mb-1"><?= esc($post['title']) ?></h2>
