@@ -1,7 +1,10 @@
 <nav class="bg-gray-900 text-white shadow-lg">
     <div class="container mx-auto px-4">
         <div class="flex justify-between items-center py-4">
-            <a class="font-bold text-xl" href="/">Mi Blog</a>
+            <a class="flex items-center gap-2 font-bold text-xl" href="/">
+                <img src="/assets/img/blog.png" alt="Blog Logo" class="h-10 w-10">
+                <span>Mi Blog</span>
+            </a>
             <div class="hidden md:flex space-x-6">
                 <?php if (isset($user) && $user): ?>
                     <?php if ($user->inGroup('admin')): ?>
