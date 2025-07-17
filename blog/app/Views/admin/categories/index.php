@@ -15,19 +15,19 @@
   <a href="/admin/categories/create" class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition font-semibold shadow">Nueva Categoría</a>
 </div>
 
-<div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6" id="categoriesGrid">
   <?php if (empty($categories)): ?>
     <div class="col-span-full text-center text-gray-500 text-lg">No hay categorías.</div>
   <?php else: ?>
     <?php foreach ($categories as $category): ?>
-      <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col gap-2 border-t-4 border-blue-400">
+      <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col gap-2 border-t-4 border-blue-400 data-category-id="<?= $category['id'] ?>">
         <span class="text-2xl font-bold text-blue-700 mb-2 flex items-center gap-2">
           <span class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">#<?= esc($category['id']) ?></span>
           <?= esc($category['name']) ?>
         </span>
         <div class="flex gap-2 mt-4">
           <a href="/admin/categories/edit/<?= $category['id'] ?>" class="bg-yellow-400 text-white px-4 py-1 rounded-full hover:bg-yellow-500 transition font-semibold shadow">Editar</a>
-          <a href="/admin/categories/delete/<?= $category['id'] ?>" class="bg-red-500 text-white px-4 py-1 rounded-full hover:bg-red-600 transition font-semibold shadow" onclick="return confirm('¿Eliminar esta categoría?')">Eliminar</a>
+          <button onclick="confirmDeleteCategory(<?= $category['id'] ?>)" class="bg-red-500 text-white px-4 py-1 rounded-full hover:bg-red-600 transition font-semibold shadow">Eliminar</button>
         </div>
       </div>
     <?php endforeach; ?>
@@ -42,4 +42,59 @@
     <a href="#" aria-label="X"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.53 6.47a.75.75 0 0 1 0 1.06L13.06 12l4.47 4.47a.75.75 0 1 1-1.06 1.06L12 13.06l-4.47 4.47a.75.75 0 0 1-1.06-1.06L10.94 12 6.47 7.53a.75.75 0 1 1 1.06-1.06L12 10.94l4.47-4.47a.75.75 0 0 1 1.06 0z"/></svg></a>
   </span>
 </footer>
+
+<script>
+// Función para mostrar notificaciones
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${type === 'success' ? 'bg-green-50 text-white' : 'bg-red-50 text-white'}`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remover después de 3 segundos
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// Función para eliminar categoría con AJAX
+async function confirmDeleteCategory(categoryId) {
+    if (confirm('¿Eliminar esta categoría?')) {
+        try {
+            const response = await fetch(`/admin/categories/delete/${categoryId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok && data.success) {
+                // Eliminar el elemento del DOM
+                const categoryElement = document.querySelector(`[data-category-id="${categoryId}"]`);
+                if (categoryElement) {
+                    categoryElement.remove();
+                    showNotification('Categoría eliminada exitosamente', 'success');
+                }
+                
+                // Si no quedan categorías, mostrar mensaje
+                const remainingCategories = document.querySelectorAll('[data-category-id]');
+                if (remainingCategories.length === 0) {
+                    const grid = document.getElementById('categoriesGrid');
+                    grid.innerHTML = '<div class="col-span-full text-center text-gray-500 text-lg">No hay categorías.</div>';
+                }
+            } else {
+                showNotification(data.message || 'Error al eliminar la categoría', 'error');
+            }
+        } catch (error) {
+            console.error(error);
+            showNotification('Error al eliminar la categoría', 'error');
+        }
+    }
+}
+</script>
+
 <?= $this->endSection() ?> 

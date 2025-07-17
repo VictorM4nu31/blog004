@@ -23,19 +23,21 @@
                 </div>
             <?php endif ?>
 
-            <form action="<?= route_to('login') ?>" method="post" class="space-y-6">
+            <form action="<?= route_to('login') ?>" method="post" class="space-y-6" id="loginForm">
                 <?= csrf_field() ?>
                 
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                     <input type="email" id="email" name="email" value="<?= old('email') ?>" required
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <div id="email-error" class="text-red-500 text-sm mt-1 hidden"></div>
                 </div>
 
                 <div>
                     <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
                     <input type="password" id="password" name="password" required
                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <div id="password-error" class="text-red-500 text-sm mt-1 hidden"></div>
                 </div>
 
                 <div class="flex items-center">
@@ -43,7 +45,7 @@
                     <label for="remember" class="text-sm text-gray-600">Recordarme</label>
                 </div>
 
-                <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition font-semibold">
+                <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed">
                     Iniciar Sesión
                 </button>
             </form>
@@ -57,3 +59,60 @@
     </div>
 </div>
 <?= $this->endSection() ?>
+<script>
+const loginForm = document.getElementById('loginForm');
+const email = document.getElementById('email');
+const password = document.getElementById('password');
+const submitBtn = document.getElementById('submitBtn');
+const emailError = document.getElementById('email-error');
+const passwordError = document.getElementById('password-error');
+let isValid = { email: false, password: false };
+function showError(element, message) {
+    element.textContent = message;
+    element.classList.remove('hidden');
+    element.previousElementSibling.classList.add('border-red-500');
+    element.previousElementSibling.classList.remove('border-gray-300');
+}
+function hideError(element) {
+    element.classList.add('hidden');
+    element.previousElementSibling.classList.remove('border-red-500');
+    element.previousElementSibling.classList.add('border-gray-300');
+}
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+function updateSubmitButton() {
+    const allValid = Object.values(isValid).every(valid => valid);
+    submitBtn.disabled = !allValid;
+}
+email.addEventListener('input', function() {
+    const value = this.value.trim();
+    if (value.length === 0) {
+        showError(emailError, 'El email es requerido');
+        isValid.email = false;
+    } else if (!isValidEmail(value)) {
+        showError(emailError, 'Por favor ingresa un email válido');
+        isValid.email = false;
+    } else {
+        hideError(emailError);
+        isValid.email = true;
+    }
+    updateSubmitButton();
+});
+password.addEventListener('input', function() {
+    const value = this.value;
+    if (value.length === 0) {
+        showError(passwordError, 'La contraseña es requerida');
+        isValid.password = false;
+    } else {
+        hideError(passwordError);
+        isValid.password = true;
+    }
+    updateSubmitButton();
+});
+document.addEventListener('DOMContentLoaded', function() {
+    if (email.value) email.dispatchEvent(new Event('input'));
+    if (password.value) password.dispatchEvent(new Event('input'));
+});
+</script>

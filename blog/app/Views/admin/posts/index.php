@@ -32,7 +32,7 @@
       <div class="col-span-full text-center text-gray-500 text-lg">No hay posts.</div>
     <?php else: ?>
       <?php foreach ($posts as $post): ?>
-        <article class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col">
+        <article class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col" data-post-id="<?= $post['id'] ?>">
           <?php if (!empty($categoryMap[$post['category_id']])): ?>
             <div class="h-2 w-full bg-gradient-to-r from-blue-500 to-green-400"></div>
           <?php endif; ?>
@@ -73,10 +73,56 @@
 </footer>
 
 <script>
-function confirmDelete(postId) {
-  if (confirm('¿Eliminar este post?')) {
-    window.location.href = '/admin/posts/delete/' + postId;
-  }
+// Función para mostrar notificaciones
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${type === 'success' ? 'bg-green-50 text-white' : 'bg-red-50 text-white'}`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remover después de 3 segundos
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// Función para eliminar post con AJAX
+async function confirmDelete(postId) {
+    if (confirm('¿Eliminar este post?')) {
+        try {
+            const response = await fetch(`/admin/posts/delete/${postId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok && data.success) {
+                // Eliminar el elemento del DOM
+                const postElement = document.querySelector(`[data-post-id="${postId}"]`);
+                if (postElement) {
+                    postElement.remove();
+                    showNotification('Post eliminado exitosamente', 'success');
+                }
+                
+                // Si no quedan posts, mostrar mensaje
+                const remainingPosts = document.querySelectorAll('[data-post-id]');
+                if (remainingPosts.length === 0) {
+                    const grid = document.querySelector('.grid');
+                    grid.innerHTML = '<div class="col-span-full text-center text-gray-500 text-lg">No hay posts.</div>';
+                }
+            } else {
+                showNotification(data.message || 'Error al eliminar el post', 'error');
+            }
+        } catch (error) {
+            console.error(error);
+            showNotification('Error al eliminar el post', 'error');
+        }
+    }
 }
 </script>
 </div>
