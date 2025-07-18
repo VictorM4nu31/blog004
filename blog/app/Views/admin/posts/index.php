@@ -53,7 +53,7 @@
             <p class="text-gray-700 flex-1 mb-4"> <?= esc(substr($post['content'], 0, 120)) ?>...</p>
             <div class="flex gap-2 mt-auto">
               <a href="/admin/posts/edit/<?= $post['id'] ?>" class="text-blue-600 hover:underline font-medium">Editar</a>
-              <button onclick="confirmDelete(<?= $post['id'] ?>)" class="text-red-600 hover:underline font-medium">Eliminar</button>
+              <a href="/admin/posts/delete/<?= $post['id'] ?>" onclick="return confirm('¿Eliminar este post?')" class="text-red-600 hover:underline font-medium">Eliminar</a>
             </div>
           </div>
         </article>
@@ -88,42 +88,7 @@ function showNotification(message, type = 'success') {
 }
 
 // Función para eliminar post con AJAX
-async function confirmDelete(postId) {
-    if (confirm('¿Eliminar este post?')) {
-        try {
-            const response = await fetch(`/admin/posts/delete/${postId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            });
-            
-            const data = await response.json();
-            
-            if (response.ok && data.success) {
-                // Eliminar el elemento del DOM
-                const postElement = document.querySelector(`[data-post-id="${postId}"]`);
-                if (postElement) {
-                    postElement.remove();
-                    showNotification('Post eliminado exitosamente', 'success');
-                }
-                
-                // Si no quedan posts, mostrar mensaje
-                const remainingPosts = document.querySelectorAll('[data-post-id]');
-                if (remainingPosts.length === 0) {
-                    const grid = document.querySelector('.grid');
-                    grid.innerHTML = '<div class="col-span-full text-center text-gray-500 text-lg">No hay posts.</div>';
-                }
-            } else {
-                showNotification(data.message || 'Error al eliminar el post', 'error');
-            }
-        } catch (error) {
-            console.error(error);
-            showNotification('Error al eliminar el post', 'error');
-        }
-    }
-}
+// (Eliminado el JS de borrado por AJAX)
 </script>
 </div>
 <?= $this->endSection() ?>

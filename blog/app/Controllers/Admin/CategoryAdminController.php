@@ -24,10 +24,10 @@ class CategoryAdminController extends BaseController
     public function store()
     {
         $validation = service('validation');
-        $rules = [
-            'name' => 'required|min_length[3]|max_length[100]|is_unique[categories.name]'
-        ];
-        if (! $this->validate($rules)) {
+        $validation->setRule('name', 'Nombre', 'required|min_length[3]|max_length[100]|is_unique[categories.name]', [
+            'is_unique' => 'Ya existe una categoría con ese nombre.'
+        ]);
+        if (! $validation->withRequest($this->request)->run()) {
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
         $categoryModel = new CategoryModel();
@@ -50,10 +50,10 @@ class CategoryAdminController extends BaseController
     public function update($id)
     {
         $validation = service('validation');
-        $rules = [
-            'name' => 'required|min_length[3]|max_length[100]|is_unique[categories.name,id,{id}]'
-        ];
-        if (! $this->validate($rules)) {
+        $validation->setRule('name', 'Nombre', "required|min_length[3]|max_length[100]|is_unique[categories.name,id,{$id}]", [
+            'is_unique' => 'Ya existe una categoría con ese nombre.'
+        ]);
+        if (! $validation->withRequest($this->request)->run()) {
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
         $categoryModel = new CategoryModel();

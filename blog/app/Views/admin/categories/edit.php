@@ -12,7 +12,7 @@
         </ul>
       </div>
     <?php endif; ?>
-    <form id="categoryEditForm" class="space-y-6">
+    <form id="categoryEditForm" method="post" action="/admin/categories/update/<?= $category['id'] ?>" class="space-y-6">
       <div>
         <label class="block mb-1 font-semibold text-blue-700">Nombre</label>
         <input type="text" name="name" id="name" class="w-full border-2 border-blue-300 px-3 py-2 rounded focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition" required value="<?= old('name', $category['name']) ?>">
@@ -27,104 +27,29 @@
 </div>
 
 <script>
-const categoryForm = document.getElementById('categoryEditForm');
 const name = document.getElementById('name');
 const submitBtn = document.getElementById('submitBtn');
 const nameError = document.getElementById('name-error');
-let isValid = { name: false };
 
-// Función para mostrar notificaciones
-function showNotification(message, type = 'success') {
-    const notification = document.createElement('div');
-    notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${type === 'success' ? 'bg-green-50 text-white' : 'bg-red-50 text-white'}`;
-    notification.textContent = message;
-    
-    document.body.appendChild(notification);
-    
-    // Auto-remover después de 3 segundos
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
-}
-
-function showError(element, message) {
-    element.textContent = message;
-    element.classList.remove('hidden');
-    element.previousElementSibling.classList.add('border-red-500');
-    element.previousElementSibling.classList.remove('border-blue-300');
-}
-
-function hideError(element) {
-    element.classList.add('hidden');
-    element.previousElementSibling.classList.remove('border-red-500');
-    element.previousElementSibling.classList.add('border-blue-300');
-}
-
-function updateSubmitButton() {
-    submitBtn.disabled = !isValid.name;
-}
-
-name.addEventListener('input', function() {
-    const value = this.value.trim();
+function validarNombre() {
+    const value = name.value.trim();
     if (value.length === 0) {
-        showError(nameError, 'El nombre es requerido');
-        isValid.name = false;
+        nameError.textContent = 'El nombre es requerido';
+        nameError.classList.remove('hidden');
+        submitBtn.disabled = true;
     } else if (value.length < 3) {
-        showError(nameError, 'El nombre debe tener al menos 3 caracteres');
-        isValid.name = false;
+        nameError.textContent = 'El nombre debe tener al menos 3 caracteres';
+        nameError.classList.remove('hidden');
+        submitBtn.disabled = true;
     } else {
-        hideError(nameError);
-        isValid.name = true;
-    }
-    updateSubmitButton();
-});
-
-// Envío del formulario con AJAX
-categoryForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    if (!isValid.name) {
-        showNotification('Por favor corrige los errores antes de enviar', 'error');
-        return;
-    }
-    
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Actualizando...';
-    try {
-        const formData = new FormData();
-        formData.append('name', name.value.trim());
-        
-        const response = await fetch(`/admin/categories/update/<?= $category['id'] ?>`, {
-            method: 'POST',
-            body: formData,
-            headers: {
-               'X-Requested-With': 'XMLHttpRequest'
-            }
-        });
-        
-        const data = await response.json();
-        
-        if (response.ok && data.success) {
-            showNotification('Categoría actualizada exitosamente', 'success');
-            // Redirigir después de un breve delay
-            setTimeout(() => {
-                window.location.href = '/admin/categories';
-            }, 1500);
-        } else {
-            showNotification(data.message || 'Error al actualizar la categoría', 'error');
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Actualizar';
-        }
-    } catch (error) {
-        console.error(error);
-        showNotification('Error al actualizar la categoría', 'error');
+        nameError.classList.add('hidden');
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Actualizar';
     }
-});
+}
 
+name.addEventListener('input', validarNombre);
 document.addEventListener('DOMContentLoaded', function() {
-    if (name.value) name.dispatchEvent(new Event('input'));
+    validarNombre();
 });
 </script>
 

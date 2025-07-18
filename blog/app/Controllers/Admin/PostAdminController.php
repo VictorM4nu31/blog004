@@ -97,12 +97,25 @@ class PostAdminController extends BaseController
             'image' => 'max_size[image,5120]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png,image/gif]'
         ];
         if (! $this->validate($rules)) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Errores de validación',
+                    'errors' => $validation->getErrors()
+                ]);
+            }
             return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
         $postModel = new PostModel();
         $post = $postModel->find($id);
         if (!$post) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Post no encontrado'
+                ]);
+            }
             return redirect()->to('/admin/posts')->with('error', 'Post no encontrado');
         }
 
@@ -111,17 +124,14 @@ class PostAdminController extends BaseController
         // Procesar la nueva imagen si se subió
         $image = $this->request->getFile('image');
         if ($image && $image->isValid() && !$image->hasMoved()) {
-            // Crear directorio si no existe
             $uploadPath = FCPATH . 'writable/uploads/posts/';
             if (!is_dir($uploadPath)) {
                 mkdir($uploadPath, 0755, true);
             }
-
             // Eliminar imagen anterior si existe
             if ($post['image'] && file_exists(FCPATH . 'writable/' . $post['image'])) {
                 unlink(FCPATH . 'writable/' . $post['image']);
             }
-
             // Generar nombre único para la nueva imagen
             $newName = $image->getRandomName();
             $image->move($uploadPath, $newName);
@@ -132,9 +142,21 @@ class PostAdminController extends BaseController
             'title' => $this->request->getPost('title'),
             'content' => $this->request->getPost('content'),
             'category_id' => $this->request->getPost('category_id'),
-            'image' => $imagePath,
         ];
+        // Solo actualizar imagen si hay nueva
+        if ($image && $image->isValid() && !$image->hasMoved()) {
+            $data['image'] = $imagePath;
+        }
+
         $postModel->update($id, $data);
+
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Post actualizado correctamente'
+            ]);
+        }
+
         return redirect()->to('/admin/posts')->with('message', 'Post actualizado correctamente');
     }
 
